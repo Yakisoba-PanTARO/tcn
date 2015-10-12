@@ -7,14 +7,6 @@
 
 tcn = {}
 
-local function shallowcopy_table(orig)
-  local copy = {}
-  for orig_key, orig_value in pairs(orig) do
-    copy[orig_key] = orig_value
-  end
-  return copy
-end
-
 function tcn.register_tcn(texturesize, ratio,
 			  subname1, recipeitem1, texture1,
 			  subname2, recipeitem2, texture2)
@@ -23,25 +15,24 @@ function tcn.register_tcn(texturesize, ratio,
   local descbase = nodedef1.description .. " " .. nodedef2.description
   local nodenamebase = "tcn:tcn_" .. subname1 .. "_" .. subname2 .. ratio
   
-  minetest.register_node(":" .. nodenamebase .. "_l", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_r", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_t", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_b", shallowcopy_table(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_l", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_r", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_t", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_b", table.copy(nodedef1))
 
-  minetest.register_node(":" .. nodenamebase .. "_lr", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_lt", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_lb", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_rt", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_rb", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_tb", shallowcopy_table(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_lr", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_lt", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_lb", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_rt", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_rb", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_tb", table.copy(nodedef1))
 
-  minetest.register_node(":" .. nodenamebase .. "_lrt", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_lrb", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_ltb", shallowcopy_table(nodedef1))
-  minetest.register_node(":" .. nodenamebase .. "_rtb", shallowcopy_table(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_lrt", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_lrb", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_ltb", table.copy(nodedef1))
+  minetest.register_node(":" .. nodenamebase .. "_rtb", table.copy(nodedef1))
 
-  minetest.register_node(":" .. nodenamebase .. "_lrtb", shallowcopy_table(nodedef1))
-
+  minetest.register_node(":" .. nodenamebase .. "_lrtb", table.copy(nodedef1))
   ----------------------------------------------------------
   
   minetest.override_item(nodenamebase .. "_l", {
@@ -60,7 +51,7 @@ function tcn.register_tcn(texturesize, ratio,
     },
     paramtype2 = "facedir",
   })
-
+  
   minetest.override_item(nodenamebase .. "_r", {
     description = descbase .. " R",
     tiles = {
@@ -329,6 +320,129 @@ function tcn.register_tcn(texturesize, ratio,
 	":0," .. texturesize * (1 - ratio) .. "=" .. texture2,
     },
     paramtype2 = "facedir",
+  })
+
+  ----------------------------------------------------------
+
+  minetest.register_craft({
+    output = nodenamebase .. "_l",
+    recipe = {
+      {recipeitem2, recipeitem1}
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_r",
+    recipe = {
+      {recipeitem1, recipeitem2}
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_t",
+    recipe = {
+      {recipeitem2},
+      {recipeitem1}
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_b",
+    recipe = {
+      {recipeitem1},
+      {recipeitem2}
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lr",
+    recipe = {
+      {recipeitem2, recipeitem1, recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lt",
+    recipe = {
+      {"", recipeitem2},
+      {recipeitem2, recipeitem1},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lb",
+    recipe = {
+      {recipeitem2, recipeitem1},
+      {"", recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_rt",
+    recipe = {
+      {recipeitem2, ""},
+      {recipeitem1, recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_rb",
+    recipe = {
+      {recipeitem1, recipeitem2},
+      {recipeitem2, ""},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_tb",
+    recipe = {
+      {recipeitem2},
+      {recipeitem1},
+      {recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lrt",
+    recipe = {
+      {"", recipeitem2, ""},
+      {recipeitem2, recipeitem1, recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lrb",
+    recipe = {
+      {recipeitem2, recipeitem1, recipeitem2},
+      {"", recipeitem2, ""},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_ltb",
+    recipe = {
+      {"", recipeitem2},
+      {recipeitem2, recipeitem1},
+      {"", recipeitem2},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_rtb",
+    recipe = {
+      {recipeitem2, ""},
+      {recipeitem1, recipeitem2},
+      {recipeitem2, ""},
+    },
+  })
+
+  minetest.register_craft({
+    output = nodenamebase .. "_lrtb",
+    recipe = {
+      {"", recipeitem2, ""},
+      {recipeitem2, recipeitem1, recipeitem2},
+      {"", recipeitem2, ""},
+    },
   })
 end
 
